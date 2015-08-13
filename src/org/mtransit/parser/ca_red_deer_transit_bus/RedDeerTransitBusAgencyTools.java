@@ -127,24 +127,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
 	static {
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<Long, RouteTripSpec>();
-		map2.put(6l, new RouteTripSpec(6l, //
-				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.id, //
-				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.id) //
-				.addTripSort(MDirectionType.NORTH.intValue(), //
-						Arrays.asList(new String[] { //
-						"935", //
-								"1312", "1314", "1315",//
-								"1316",//
-								"1313", "936", "941",//
-								"1100", "1184", "1245" //
-						})) //
-				.addTripSort(MDirectionType.SOUTH.intValue(), //
-						Arrays.asList(new String[] { //
-						"1245",//
-								"1127", "1048", "940",//
-								"935" //
-						})) //
-				.compileBothTripSort());
 		map2.put(50l, new RouteTripSpec(50l, //
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr Term", //
 				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Edgar Ind") //
@@ -184,6 +166,15 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.id)) {
 			return; // split
+		}
+		if (mRoute.id == 6l) {
+			if (gTrip.getRouteId().endsWith("-IB")) {
+				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
+				return;
+			} else if (gTrip.getRouteId().endsWith("-OB")) {
+				mTrip.setHeadsignDirection(MDirectionType.NORTH);
+				return;
+			}
 		}
 		if (gTrip.getRouteId().endsWith("-IB")) {
 			mTrip.setHeadsignInbound(MInboundType.INBOUND);
