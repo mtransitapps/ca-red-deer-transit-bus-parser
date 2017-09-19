@@ -96,10 +96,11 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 			return Long.parseLong(gRoute.getRouteShortName()); // use route short name as route ID
 		}
 		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
-		matcher.find();
-		long id = Long.parseLong(matcher.group());
-		if (gRoute.getRouteShortName().endsWith(A)) {
-			return ROUTE_ID_ENDS_WITH_A + id;
+		if (matcher.find()) {
+			long id = Long.parseLong(matcher.group());
+			if (gRoute.getRouteShortName().endsWith(A)) {
+				return ROUTE_ID_ENDS_WITH_A + id;
+			}
 		}
 		System.out.printf("\nUnexpected route ID for %s!\n", gRoute);
 		System.exit(-1);
@@ -131,9 +132,33 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr Term", //
 				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Edgar Ind") //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
-						Arrays.asList(new String[] { "1226", "763", "1267" })) //
+						Arrays.asList(new String[] { //
+						"1226", //
+								"763", //
+								"1267", // Sorensen Station 49 AV @ 48 ST
+						})) //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
-						Arrays.asList(new String[] { "1267", "754", "1226" })) //
+						Arrays.asList(new String[] { //
+						"1267", // Sorensen Station 49 AV @ 48 ST
+								"1389", //
+								"1226", //
+						})) //
+				.compileBothTripSort());
+		map2.put(51L, new RouteTripSpec(51L, //
+				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_INBOUND, MInboundType.INBOUND.getId(), //
+				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_INBOUND, MInboundType.OUTBOUND.getId()) //
+				.addTripSort(MInboundType.INBOUND.intValue(), //
+						Arrays.asList(new String[] { //
+						"1083", // EB 77 ST @ 40 AV
+								"1069", // ++
+								"1267", // Sorensen Station 49 AV @ 48 ST #DOWNTOWN
+						})) //
+				.addTripSort(MInboundType.OUTBOUND.intValue(), //
+						Arrays.asList(new String[] { //
+						"1267", // Sorensen Station 49 AV @ 48 ST #DOWNTOWN
+								"993", // ++
+								"1083", // EB 77 ST @ 40 AV
+						})) //
 				.compileBothTripSort());
 		ALL_ROUTE_TRIPS2 = map2;
 	}
@@ -167,15 +192,18 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
-		if (mRoute.getId() == 6l) {
-			if (gTrip.getRouteId().endsWith("-IB")) {
-				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
-				return;
-			} else if (gTrip.getRouteId().endsWith("-OB")) {
-				mTrip.setHeadsignDirection(MDirectionType.NORTH);
-				return;
+		if (isGoodEnoughAccepted()) {
+			if (mRoute.getId() == 6l) {
+				if (gTrip.getRouteId().endsWith("-IB")) {
+					mTrip.setHeadsignDirection(MDirectionType.SOUTH);
+					return;
+				} else if (gTrip.getRouteId().endsWith("-OB")) {
+					mTrip.setHeadsignDirection(MDirectionType.NORTH);
+					return;
+				}
 			}
 		}
+		String tripHeadsign = gTrip.getTripHeadsign();
 		if (gTrip.getRouteId().endsWith("-IB")) {
 			mTrip.setHeadsignInbound(MInboundType.INBOUND);
 			return;
@@ -183,21 +211,19 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 			mTrip.setHeadsignInbound(MInboundType.OUTBOUND);
 			return;
 		}
-		String tripHeadsign = gTrip.getTripHeadsign();
-		if (StringUtils.isEmpty(tripHeadsign)) {
-			if (mRoute.getId() == 12l) {
-				tripHeadsign = "Loop";
-			} else if (mRoute.getId() == 12l + ROUTE_ID_ENDS_WITH_A) { // 12A
-				tripHeadsign = "Loop";
-			} else if (mRoute.getId() == 52l) {
-				tripHeadsign = "Riverside Dr";
-			} else if (mRoute.getId() == 53l) {
-				tripHeadsign = "Riverside Dr";
-			} else if (mRoute.getId() == 54l) {
-				tripHeadsign = "Olymel";
-			} else {
-				System.out.printf("\n%s: Unexpected trip %s!\n", mRoute.getId(), gTrip);
-				System.exit(-1);
+		if (isGoodEnoughAccepted()) {
+			if (StringUtils.isEmpty(tripHeadsign)) {
+				if (mRoute.getId() == 12l) {
+					tripHeadsign = "Loop";
+				} else if (mRoute.getId() == 12l + ROUTE_ID_ENDS_WITH_A) { // 12A
+					tripHeadsign = "Loop";
+				} else if (mRoute.getId() == 52l) {
+					tripHeadsign = "Riverside Dr";
+				} else if (mRoute.getId() == 53l) {
+					tripHeadsign = "Riverside Dr";
+				} else if (mRoute.getId() == 54l) {
+					tripHeadsign = "Olymel";
+				}
 			}
 		}
 		int directionId = gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId();
