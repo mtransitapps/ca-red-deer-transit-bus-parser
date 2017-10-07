@@ -80,6 +80,11 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
+	public boolean excludeRoute(GRoute gRoute) {
+		return super.excludeRoute(gRoute);
+	}
+
+	@Override
 	public Integer getAgencyRouteType() {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
@@ -128,6 +133,40 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
 	static {
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<Long, RouteTripSpec>();
+		map2.put(12l, new RouteTripSpec(12l, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"878", // Twp Rd 273a @ Petrolia Dr
+								"635", // ++
+								"900", // WB BENNETT ST @ BAKER AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"900", // WB BENNETT ST @ BAKER AV
+								"886", // ++
+								"878", // Twp Rd 273a @ Petrolia Dr
+						})) //
+				.compileBothTripSort());
+		map2.put(12l + ROUTE_ID_ENDS_WITH_A, new RouteTripSpec(12l + ROUTE_ID_ENDS_WITH_A, // 12A
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"623", // Airport Dr @ Tamarac Bl
+								"950", // ++
+								"900", // WB BENNETT ST @ BAKER AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"900", // WB BENNETT ST @ BAKER AV
+								"886", // ++
+								"878", // ++ Twp Rd 273a @ Petrolia Dr
+								"635", // ++
+								"623", // Airport Dr @ Tamarac Bl
+						})) //
+				.compileBothTripSort());
 		map2.put(50l, new RouteTripSpec(50l, //
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr Term", //
 				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Edgar Ind") //
@@ -158,6 +197,45 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						"1267", // Sorensen Station 49 AV @ 48 ST #DOWNTOWN
 								"993", // ++
 								"1083", // EB 77 ST @ 40 AV
+						})) //
+				.compileBothTripSort());
+		map2.put(52l, new RouteTripSpec(52l, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Riverside Dr", //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "") //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"701", // SB 57 AV @ 41 ST
+								"997", // WB RIVERSIDE DR @ 48 AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						/* no stops */
+						})) //
+				.compileBothTripSort());
+		map2.put(53l, new RouteTripSpec(53l, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Riverside Dr", //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "") //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"798", // WB HORN ST @ 61 AV
+								"997", // WB RIVERSIDE DR @ 48 AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						/* no stops */
+						})) //
+				.compileBothTripSort());
+		map2.put(54l, new RouteTripSpec(54l, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Riverside Dr", //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "") //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"911", // EB IRONSIDE ST @ 40 AV
+								"1081", // NB RIVERSIDE DR @ 76 ST
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						/* no stops */
 						})) //
 				.compileBothTripSort());
 		ALL_ROUTE_TRIPS2 = map2;
@@ -192,17 +270,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
-		if (isGoodEnoughAccepted()) {
-			if (mRoute.getId() == 6l) {
-				if (gTrip.getRouteId().endsWith("-IB")) {
-					mTrip.setHeadsignDirection(MDirectionType.SOUTH);
-					return;
-				} else if (gTrip.getRouteId().endsWith("-OB")) {
-					mTrip.setHeadsignDirection(MDirectionType.NORTH);
-					return;
-				}
-			}
-		}
 		String tripHeadsign = gTrip.getTripHeadsign();
 		if (gTrip.getRouteId().endsWith("-IB")) {
 			mTrip.setHeadsignInbound(MInboundType.INBOUND);
@@ -210,21 +277,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		} else if (gTrip.getRouteId().endsWith("-OB")) {
 			mTrip.setHeadsignInbound(MInboundType.OUTBOUND);
 			return;
-		}
-		if (isGoodEnoughAccepted()) {
-			if (StringUtils.isEmpty(tripHeadsign)) {
-				if (mRoute.getId() == 12l) {
-					tripHeadsign = "Loop";
-				} else if (mRoute.getId() == 12l + ROUTE_ID_ENDS_WITH_A) { // 12A
-					tripHeadsign = "Loop";
-				} else if (mRoute.getId() == 52l) {
-					tripHeadsign = "Riverside Dr";
-				} else if (mRoute.getId() == 53l) {
-					tripHeadsign = "Riverside Dr";
-				} else if (mRoute.getId() == 54l) {
-					tripHeadsign = "Olymel";
-				}
-			}
 		}
 		int directionId = gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId();
 		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), directionId);
