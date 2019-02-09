@@ -30,8 +30,8 @@ import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 import org.mtransit.parser.mt.data.MTripStop;
 
-// http://data.reddeer.ca/
-// http://webmap.reddeer.ca/transit/google_transit.zip
+// http://data.reddeer.ca/gtfsdatafeed
+// http://data.reddeer.ca/data/GTFS/RD_GTFS.zip
 public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	public static void main(String[] args) {
@@ -284,14 +284,14 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
-								Stops.ALL_STOPS.get("935"), // EB VANIER DR @ 30 AV
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
+								Stops.ALL_STOPS.get("933"), // EB IRONSTONE DR @ 30 AV
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("934"), // WB IRONSTONE DR @ 30 AV
-								Stops.ALL_STOPS.get("962"), // NB 49 AV @ 33 ST
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("962"), // NB 49 AV @ 34 ST
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(2L, new RouteTripSpec(2L, //
@@ -299,14 +299,14 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("788"), // EB JEWELL ST @ TAYLOR DR
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("786"), // WB JEWELL ST @ TAYLOR DR
 								Stops.ALL_STOPS.get("646"), // NB KERRY WOOD DR @ FERN RD
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(3L, new RouteTripSpec(3L, //
@@ -314,14 +314,14 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1096"), // EB AVERY ST @ AMER CL
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("1097"), // WB AVERY ST @ 30 AV
 								Stops.ALL_STOPS.get("734"), // NB 54 AV @ 45 ST
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(4L, new RouteTripSpec(4L, //
@@ -329,60 +329,54 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("795"), // WB JORDAN PKY @ TAYLOR DR
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("794"), // EB JORDAN PARKWAY @ STN 5
 								Stops.ALL_STOPS.get("1058"), // SB GAETZ AV @ VILLAGE MALL
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(5L, new RouteTripSpec(5L, //
-				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Deer Pk", // Rosedale South
+				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Collicutt Ctr", // "Deer Pk", // Rosedale South
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
-								Stops.ALL_STOPS.get("1003"), // != EB 49 ST @ 48 AV
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1005"), // == NB 47 AV @ 51 ST
 								Stops.ALL_STOPS.get("1362"), // == != EB 50 ST @30 AV
 								Stops.ALL_STOPS.get("1363"), // != <> NB RUTHERFORD DR @ RUTHERFORD CL
 								Stops.ALL_STOPS.get("1365"), // != != EB ROLAND ST @ ROBERTS CR
-								Stops.ALL_STOPS.get("1364"), // != WB ROLAND ST @ ROBERTS CR
-								Stops.ALL_STOPS.get("1366"), // != WB ROLAND ST @ ROBERTS CR
 								Stops.ALL_STOPS.get("1173"), // == SB RIDEOUT AV @REICHLEY ST
 								Stops.ALL_STOPS.get("1326"), // == SB DAINES @ DUSTON ST
-								Stops.ALL_STOPS.get("1211"), // != SB LAWFORD AV @ 32 ST
-								Stops.ALL_STOPS.get("1133"), // != NB LOCKWOOD AV @ LANCASTER DR =>
 								Stops.ALL_STOPS.get("1155"), // != WB 32 ST @ DAINES AV
-								Stops.ALL_STOPS.get("1097"), // != WB AVERY ST @ 30 AV =>
+								Stops.ALL_STOPS.get("1098"), // != SB 30 AV @ COLLICUTT CENTRE =>
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1096"), // EB AVERY ST @ AMER CL
-								Stops.ALL_STOPS.get("1365"), // != EB ROLAND ST @ ROBERTS CR
-								Stops.ALL_STOPS.get("1363"), // <> NB RUTHERFORD DR @ RUTHERFORD CL
+						Stops.ALL_STOPS.get("1100"), // NB 30 AV @ COLLICUT CENTRE
 								Stops.ALL_STOPS.get("1121"), // != WB 50 ST @ 30 AV
 								Stops.ALL_STOPS.get("1227"), // WB 55 ST @ 42A AV
 								Stops.ALL_STOPS.get("1006"), // SB 47 AV @ 55 ST
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(6L, new RouteTripSpec(6L, //
-				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Clearview Rdg / Timberlands", //
+				MInboundType.OUTBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Garden Hts", // "Clearview Rdg" + _SLASH_ + "Timberlands", //
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1378"), // EB TIMBERLANDS DR @ 30 AV
-								Stops.ALL_STOPS.get("1243"), // EB TIMOTHY DR @ TOBIN GT
+								Stops.ALL_STOPS.get("1357"), // NB GARDEN GT @ GREENWAY ST
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1243"), // EB TIMOTHY DR @ TOBIN GT
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1357"), // NB GARDEN GT @ GREENWAY ST
+								Stops.ALL_STOPS.get("1243"), // EB TIMOTHY DR @ TOBIN GT
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(7L, new RouteTripSpec(7L, //
@@ -390,15 +384,15 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
-								Stops.ALL_STOPS.get("934"), // WB IRONSTONE DR @ 30 AV
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
+								Stops.ALL_STOPS.get("936"), // WB VANIER DR @ VINE GT
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("935"), // EB VANIER DR @ 30 AV
 								Stops.ALL_STOPS.get("1133"), // NB LOCKWOOD AV @ LANCASTER DR
 								Stops.ALL_STOPS.get("1020"), // WB 35 ST @ 43 AV
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(8L, new RouteTripSpec(8L, //
@@ -406,14 +400,14 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("786"), // WB JEWELL ST @ TAYLOR DR
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("788"), // EB JEWELL ST @ TAYLOR DR
 								Stops.ALL_STOPS.get("1058"), // SB GAETZ AV @ VILLAGE MALL
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(9L, new RouteTripSpec(9L, //
@@ -421,7 +415,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1134"), // SB LOCKWOOD AV @ 32 ST
 								Stops.ALL_STOPS.get("912"), // WB IRONSIDE ST @ INGLIS CR
 						})) //
@@ -429,7 +423,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("911"), // EB IRONSIDE ST @ 40 AV
 								Stops.ALL_STOPS.get("1046"), // WB 44 ST @ 40 AV
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(10L, new RouteTripSpec(10L, //
@@ -437,7 +431,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("911"), // EB IRONSIDE ST @ 40 AV
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
@@ -445,7 +439,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						Stops.ALL_STOPS.get("912"), // WB IRONSIDE ST @ INGLIS CR
 								Stops.ALL_STOPS.get("897"), // NB 50 AV @ BENNETT
 								Stops.ALL_STOPS.get("733"), // EB 43 ST @ TAYLOR DR
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(11L, new RouteTripSpec(11L, //
@@ -453,7 +447,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "City Ctr" + _SLASH_ + "Sorensen Sta") //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("794"), // EB JORDAN PARKWAY @ STN 5
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
@@ -461,7 +455,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						Stops.ALL_STOPS.get("795"), // WB JORDAN PKY @ TAYLOR DR
 								Stops.ALL_STOPS.get("760"), // EB HORN ST @ TAYLOR DR
 								Stops.ALL_STOPS.get("1058"), // SB GAETZ AV @ VILLAGE MALL
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(12L, new RouteTripSpec(12L, //
@@ -523,11 +517,11 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						Stops.ALL_STOPS.get("1083"), // EB 77 ST @ 40 AV
 								Stops.ALL_STOPS.get("1082"), // SB RIVERSIDE DR @ 77 ST
 								Stops.ALL_STOPS.get("1069"), // ++
-								Stops.ALL_STOPS.get("988"), // NB 49 AV @ 49 ST #DOWNTOWN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST #DOWNTOWN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("993"), // ++
 								Stops.ALL_STOPS.get("1083"), // EB 77 ST @ 40 AV
 						})) //
@@ -576,14 +570,14 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Red Deer") // Sorensen Sta
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1077"), // NB GAETZ AV @ 78 ST
 								Stops.ALL_STOPS.get("1303"), // WB COLLEGE AVE @ 52 ST
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("1303"), // WB COLLEGE AVE @ 52 ST
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		map2.put(101L, new RouteTripSpec(101L, //
@@ -591,13 +585,13 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MInboundType.INBOUND.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Red Deer") // Sorensen Sta
 				.addTripSort(MInboundType.OUTBOUND.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+						Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 								Stops.ALL_STOPS.get("1303"), // WB COLLEGE AVE @ 52 ST
 						})) //
 				.addTripSort(MInboundType.INBOUND.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("1303"), // WB COLLEGE AVE @ 52 ST
-								Stops.ALL_STOPS.get("1267"), // 49 AV @ 48 ST SORENSEN STN
+								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
 						})) //
 				.compileBothTripSort());
 		ALL_ROUTE_TRIPS2 = map2;

@@ -18,7 +18,7 @@ echo "public class Stops {" >> $JAVA_STOPS_FILE;
 echo "	public static HashMap<String, String> ALL_STOPS;" >> $JAVA_STOPS_FILE;
 echo "	static {" >> $JAVA_STOPS_FILE;
 echo "		HashMap<String, String> allStops = new HashMap<String, String>();" >> $JAVA_STOPS_FILE;
-awk -F "\"*,\"*" '{print "		allStops.put(\"" $2 "\", \"" $1"\"); // " $3}' input/gtfs/stops.txt >> $JAVA_STOPS_FILE;
+awk -F "\"*,\"*" '/^\s*$/ {next;} { print "		allStops.put(\"" $1 "\", \"" $1"\"); // " $2}' input/gtfs/stops.txt >> $JAVA_STOPS_FILE;
 checkResult $? false;
 echo "		ALL_STOPS = allStops;" >> $JAVA_STOPS_FILE;
 echo "	}" >> $JAVA_STOPS_FILE;
