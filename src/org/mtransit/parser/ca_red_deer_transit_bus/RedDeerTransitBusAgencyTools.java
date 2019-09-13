@@ -171,6 +171,8 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				case 54: return "6A3683";
 				case 100: return "016E01";
 				case 101: return "0000B6";
+				case 103: return null; // TODO?
+				case 104: return null; // TODO?
 				// @formatter:on
 				}
 			}
@@ -241,6 +243,8 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				case 54: return "Riverside Ind Pk" + _SLASH_ + "Olymel";
 				case 100: return "Lacombe Blackfalds Express";
 				case 101: return "Lacombe Blackfalds Local";
+				case 103: return "Springbrook, Penhold, Innisfail, Bower Mall";
+				case 104: return "Springbrook, Penhold, Innisfail, Bower Mall";
 				// @formatter:on
 				}
 			}
@@ -470,15 +474,15 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
 				.addTripSort(MDirectionType.NORTH.intValue(), //
 						Arrays.asList(new String[] { //
-						Stops.ALL_STOPS.get("878"), // Twp Rd 273a @ Petrolia Dr
-								Stops.ALL_STOPS.get("635"), // ++
+						Stops.ALL_STOPS.get("877"), // NB LEVA AV @ LAKE ST
+								Stops.ALL_STOPS.get("1393"), // SB LIBERTY AVE @ THE HAMLETS
 								Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
 						})) //
 				.addTripSort(MDirectionType.SOUTH.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
-								Stops.ALL_STOPS.get("886"), // ++
-								Stops.ALL_STOPS.get("878"), // Twp Rd 273a @ Petrolia Dr
+								Stops.ALL_STOPS.get("890"), // SB 50 AV @ 22 ST
+								Stops.ALL_STOPS.get("877"), // NB LEVA AV @ LAKE ST
 						})) //
 				.compileBothTripSort());
 		map2.put(12L + ROUTE_ID_ENDS_WITH_A, new RouteTripSpec(12L + ROUTE_ID_ENDS_WITH_A, // 12A
@@ -599,6 +603,34 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 						Arrays.asList(new String[] { //
 						Stops.ALL_STOPS.get("1303"), // WB COLLEGE AVE @ 52 ST
 								Stops.ALL_STOPS.get("1267"), // Sorensen Station 49 AV @ 48 ST
+						})) //
+				.compileBothTripSort());
+		map2.put(103L, new RouteTripSpec(103L, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						Stops.ALL_STOPS.get("1402"), // 42ND ST @ 51AV
+								Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
+								Stops.ALL_STOPS.get("1402"), // 42ND ST @ 51AV
+						})) //
+				.compileBothTripSort());
+		map2.put(104L, new RouteTripSpec(104L, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						Stops.ALL_STOPS.get("1402"), // 42ND ST @ 51AV
+								Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						Stops.ALL_STOPS.get("900"), // WB BENNETT ST @ BAKER AV
+								Stops.ALL_STOPS.get("1402"), // 42ND ST @ 51AV
 						})) //
 				.compileBothTripSort());
 		ALL_ROUTE_TRIPS2 = map2;
