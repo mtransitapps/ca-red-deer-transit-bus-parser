@@ -26,5 +26,3 @@ src/org/mtransit/parser/*/Stops.java
 /parse_next.sh
 /parse_pre.sh
 /unzip_gtfs.sh
-
-TODO always overwrite git ignore
