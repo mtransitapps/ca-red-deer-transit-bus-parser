@@ -16,3 +16,13 @@ hs_err_pid*
 /output/
 
 src/org/mtransit/parser/*/Stops.java
+
+# Shared files
+/build.gradle
+/change_directory
+/download.sh
+/list_change.sh
+/parse_current.sh
+/parse_next.sh
+/parse_pre.sh
+/unzip_gtfs.sh
