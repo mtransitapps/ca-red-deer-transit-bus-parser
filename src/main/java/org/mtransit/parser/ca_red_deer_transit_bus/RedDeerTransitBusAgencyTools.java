@@ -475,13 +475,13 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				.addTripSort(MDirectionType.NORTH.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.getALL_STOPS().get("877"), // NB LEVA AV @ LAKE ST
-								Stops.getALL_STOPS().get("1393"), // SB LIBERTY AVE @ THE HAMLETS
+								Stops.getALL_STOPS().get("656"), // NB TAYLOR DR @ 19 ST
 								Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV
 						})) //
 				.addTripSort(MDirectionType.SOUTH.intValue(), //
 						Arrays.asList(new String[] { //
 						Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV
-								Stops.getALL_STOPS().get("890"), // SB 50 AV @ 22 ST
+								Stops.getALL_STOPS().get("885"), // SB 49 AV @ SPRUCE ST
 								Stops.getALL_STOPS().get("877"), // NB LEVA AV @ LAKE ST
 						})) //
 				.compileBothTripSort());
