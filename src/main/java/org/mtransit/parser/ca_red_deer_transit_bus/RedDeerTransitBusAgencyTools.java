@@ -2,6 +2,7 @@ package org.mtransit.parser.ca_red_deer_transit_bus;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mtransit.parser.CleanUtils;
+import org.mtransit.parser.ColorUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
 import org.mtransit.parser.Pair;
@@ -125,7 +126,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String getRouteColor(GRoute gRoute) {
 		String routeColor = gRoute.getRouteColor();
-		if (WHITE.equalsIgnoreCase(routeColor)) {
+		if (ColorUtils.WHITE.equalsIgnoreCase(routeColor)) {
 			routeColor = null;
 		}
 		if (StringUtils.isEmpty(routeColor)) {
