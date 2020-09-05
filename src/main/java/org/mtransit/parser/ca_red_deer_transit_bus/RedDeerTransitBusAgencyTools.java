@@ -131,8 +131,11 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		if (StringUtils.isEmpty(routeColor)) {
 			if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
 				int rsn = Integer.parseInt(gRoute.getRouteShortName());
-				if (rsn >= 10) {
+				if (rsn >= 10 && rsn < 20) {
 					return "5E5F5F"; // GRAY
+				}
+				if (rsn >= 20 && rsn < 42) {
+					return YELLOW_SCHOOL_BUS_COLOR;
 				}
 				switch (rsn) {
 				// @formatter:off
@@ -140,6 +143,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				case 2: return "1BAFA0"; // BLUE
 				case 3: return "DCA340"; // YELLOW MUSTARD
 				case 4: return "8A5494"; // PURPLE
+				case 53: return null; // TODO?
 				case 103: return null; // TODO?
 				case 104: return null; // TODO?
 				// @formatter:on
@@ -182,12 +186,39 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				case 16: return "Oriole Pk";
 				case 18: return "Riverside Ind";
 				case 19: return "Edgar Ind";
+				case 20: return "Oriole Pk, Fairview" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 21: return "Glendale, Normandeau, Highland Green" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 22: return "Pines, Kentwood, Normandeau" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 23: return "Clearview, Rosedale, Deer Pk (Morth), Eastview Ests" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 24: return "East Hl - Morrisroe, Sunnybrook, Deer Pk (South), Anders, Lancaster" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 25: return "Kentwood, Johnstone, Oriole Pk West, Riverside Mdws" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 26: return "West Pk, Bower" + _SLASH_ + "Hunting Hls & Notre Dame HS";
+				case 27: return "Eastview Ests, Clearview, Rosedale, Deer Pk (North)" + _SLASH_ + "Hunting Hls & Notre Dame HS";
+				case 28: return "Eastview Ests, Clearview, Rosedale, Deer Pk (North)" + _SLASH_ + "Eastview Middle School";
+				case 29: return "City Ctr" + _SLASH_ + "Hunting Hls & Notre Dame HS";
+				case 30: return "Sorensen Sta (Downtown)" + _SLASH_ + "Gateway Christian S";
+				case 31: return "Sorensen Sta (Downtown)" + _SLASH_ + "St Joseph HS";
+				case 32: return "Timberlands, Clearview Rdg, Garden Hghts, Pines, Normandeau" + _SLASH_ + "Central Middle School";
+				case 33: return "Sorensen Sta (Downtown)" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 34: return "Highland Green, Normandeau, Pines" + _SLASH_ + "St Joseph HS";
+				case 35: return "Oriole Pk West, Oriole Pk,	Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
+				case 36: return "Sorensen Sta (Downtown)" + _SLASH_ + "Central Middle School";
+				case 37: return "Clearview, Timberlands, Rosedale" + _SLASH_ + "St Joseph HS";
+				case 38: return "Eastview, Deer Pk, Clearview" + _SLASH_ + "St Joseph HS";
+				case 39: return "Anders-on-the-Lk, Lancaster, Deer Pk (South), Morrisroe" + _SLASH_ + "Eastview Middle School";
+				case 40: return "Johnstone Pk, Johnstone Crossing, Kentwood" + _SLASH_ + "St Joseph HS";
+				case 41: return "Glendale, Kentwood (South), Normandeau" + _SLASH_ + "St Joseph HS";
+				case 42: return "Timberlands, Garden Hghts, Clearview North" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
+				case 53: return "Riverside Industrial / Olymel Routes";
 				case 103: return "2A South Regional";
 				case 104: return "2A South Regional";
 				// @formatter:on
 				}
 			}
-			throw new MTLog.Fatal("Unexpected route long name '%s'", gRoute);
+			if ("35A".equalsIgnoreCase(gRoute.getRouteShortName())) {
+				return "Oriole Pk West, Oriole Pk,	Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
+			}
+			throw new MTLog.Fatal("Unexpected route long name '%s'", gRoute.toStringPlus());
 		}
 		return routeLongName;
 	}
@@ -297,6 +328,20 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 					Arrays.asList( //
 							Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV #BOWER
 							Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+					)) //
+			.compileBothTripSort());
+		map2.put(29L, new RouteTripSpec(29L, // because same trip headsigns
+			0, MTrip.HEADSIGN_TYPE_STRING, "Sorensen", //
+			1, MTrip.HEADSIGN_TYPE_STRING, "Hunting Hls & Notre Dame HS")
+			.addTripSort(0, //
+					Arrays.asList( //
+							Stops.getALL_STOPS().get("1134"), // SB LOCKWOOD AV @  32 ST
+							Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+					)) //
+			.addTripSort(1, //
+					Arrays.asList( //
+							Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+							Stops.getALL_STOPS().get("1130") // WB LEES ST @ LOCKWOOD AV
 					)) //
 			.compileBothTripSort());
 		map2.put(103L, new RouteTripSpec(103L, //
