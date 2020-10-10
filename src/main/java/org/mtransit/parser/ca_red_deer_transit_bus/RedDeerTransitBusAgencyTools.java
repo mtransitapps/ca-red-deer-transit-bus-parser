@@ -308,11 +308,13 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				.addTripSort(0, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+								Stops.getALL_STOPS().get("934"), // WB IRONSTONE DR @ 30 AV
 								Stops.getALL_STOPS().get("900") // WB BENNETT ST @ BAKER AV #BOWER
 						)) //
 				.addTripSort(1, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV #BOWER
+								Stops.getALL_STOPS().get("1017"), // WB ALLAN ST @ 40 AV
 								Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
 						)) //
 				.compileBothTripSort());
