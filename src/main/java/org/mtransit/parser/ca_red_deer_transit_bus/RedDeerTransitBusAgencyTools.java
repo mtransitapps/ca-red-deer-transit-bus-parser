@@ -18,14 +18,12 @@ import org.mtransit.parser.gtfs.data.GTrip;
 import org.mtransit.parser.gtfs.data.GTripStop;
 import org.mtransit.parser.mt.data.MAgency;
 import org.mtransit.parser.mt.data.MDirectionType;
-import org.mtransit.parser.mt.data.MInboundType;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 import org.mtransit.parser.mt.data.MTripStop;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -89,11 +87,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
-	public boolean excludeRoute(GRoute gRoute) {
-		return super.excludeRoute(gRoute);
-	}
-
-	@Override
 	public Integer getAgencyRouteType() {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
@@ -134,7 +127,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				if (rsn >= 10 && rsn < 20) {
 					return "5E5F5F"; // GRAY
 				}
-				if (rsn >= 20 && rsn < 42) {
+				if (rsn >= 20 && rsn <= 42) {
 					return YELLOW_SCHOOL_BUS_COLOR;
 				}
 				switch (rsn) {
@@ -155,12 +148,12 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 			if ("35A".equalsIgnoreCase(gRoute.getRouteShortName())) {
 				return YELLOW_SCHOOL_BUS_COLOR;
 			}
-			throw new MTLog.Fatal("Unexpected route color '%s'", gRoute);
+			throw new MTLog.Fatal("Unexpected route color '%s'", gRoute.toStringPlus());
 		}
 		return routeColor;
 	}
 
-	private static final Pattern ROUTE_RSN = Pattern.compile("(route [\\d]+[a-zA-Z]?)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ROUTE_RSN = Pattern.compile("(route [\\d]+[a-z]?)", Pattern.CASE_INSENSITIVE);
 
 	private static final String _SLASH_ = " / ";
 
@@ -201,7 +194,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				case 32: return "Timberlands, Clearview Rdg, Garden Hghts, Pines, Normandeau" + _SLASH_ + "Central Middle School";
 				case 33: return "Sorensen Sta (Downtown)" + _SLASH_ + "Lindsay Thurber Comprehensive HS";
 				case 34: return "Highland Green, Normandeau, Pines" + _SLASH_ + "St Joseph HS";
-				case 35: return "Oriole Pk West, Oriole Pk,	Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
+				case 35: return "Oriole Pk West, Oriole Pk, Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
 				case 36: return "Sorensen Sta (Downtown)" + _SLASH_ + "Central Middle School";
 				case 37: return "Clearview, Timberlands, Rosedale" + _SLASH_ + "St Joseph HS";
 				case 38: return "Eastview, Deer Pk, Clearview" + _SLASH_ + "St Joseph HS";
@@ -216,7 +209,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				}
 			}
 			if ("35A".equalsIgnoreCase(gRoute.getRouteShortName())) {
-				return "Oriole Pk West, Oriole Pk,	Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
+				return "Oriole Pk West, Oriole Pk, Riverside Mdws, Fairview" + _SLASH_ + "Central Middle School";
 			}
 			throw new MTLog.Fatal("Unexpected route long name '%s'", gRoute.toStringPlus());
 		}
@@ -240,7 +233,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		return AGENCY_COLOR;
 	}
 
-	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
+	private static final HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
 
 	static {
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<>();
@@ -264,7 +257,13 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				.addTripSort(0, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("1078"), // WB KINGSTON DR @ GAETZ AV #KINGSTON
+								Stops.getALL_STOPS().get("778"), // == SB JORDAN PARKWAY @ JOHNSTONE DR WB
+								Stops.getALL_STOPS().get("774"), // != EB JEWELL ST @ JOHNSTONE DR
+								Stops.getALL_STOPS().get("788"), // != EB JEWELL ST @ TAYLOR DR
+								Stops.getALL_STOPS().get("790"), // != EB JOHNSTONE DR @ TAYLOR DR
+								Stops.getALL_STOPS().get("787"), // == SB TAYLOR DR @ JEWELL ST
 								Stops.getALL_STOPS().get("1060"), // 67 ST @ GAETZ AV
+								Stops.getALL_STOPS().get("1442"), // 32 St @ 30 Av
 								Stops.getALL_STOPS().get("900") // WB BENNETT ST @ BAKER AV #BOWER
 						)) //
 				.addTripSort(1, //
@@ -293,12 +292,21 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				.addTripSort(0, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("1079"), // EB KINGSTON DR @ GAETZ AV #KINGSTON
+								Stops.getALL_STOPS().get("739"), // != EB 49 ST @ 52 AV
+								Stops.getALL_STOPS().get("982"), // != WB 48 ST @ 49 AV
+								Stops.getALL_STOPS().get("1267"), // <> 49 AV @ 48 ST SORENSEN STN
+								Stops.getALL_STOPS().get("1003"), // != EB 49 ST @ 48 AV
 								Stops.getALL_STOPS().get("901") // EB BENNETT ST @ BAKER AV #BOWER
 						)) //
 				.addTripSort(1, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("901"), // EB BENNETT ST @ BAKER AV #BOWER
+								Stops.getALL_STOPS().get("911"), // EB IRONSIDE ST @ 40 AV
+								Stops.getALL_STOPS().get("1100"), // NB 30 AV @ COLLICUT CENTRE
 								Stops.getALL_STOPS().get("1092"), // WB 39 ST @ ELLENWOOD DR
+								Stops.getALL_STOPS().get("1004"), // != WB ROSS ST @ 47 AV
+								Stops.getALL_STOPS().get("1267"), // <> 49 AV @ 48 ST SORENSEN STN
+								Stops.getALL_STOPS().get("740"), // != WB 50 ST @ SUPERSTORE AC
 								Stops.getALL_STOPS().get("1079") // EB KINGSTON DR @ GAETZ AV #KINGSTON
 						)) //
 				.compileBothTripSort());
@@ -314,6 +322,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				.addTripSort(1, //
 						Arrays.asList( //
 								Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV #BOWER
+								Stops.getALL_STOPS().get("922"), // NB IRWIN AV @ 19 ST
 								Stops.getALL_STOPS().get("1017"), // WB ALLAN ST @ 40 AV
 								Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
 						)) //
@@ -406,20 +415,19 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
-		String tripHeadsign = gTrip.getTripHeadsign();
-		int directionId = gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId();
-		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), directionId);
+		mTrip.setHeadsignString(
+			cleanTripHeadsign(gTrip.getTripHeadsign()),
+			gTrip.getDirectionIdOrDefault()
+		);
 	}
 
-	private static final Pattern STARTS_WITH_RSN = Pattern.compile("^[\\d]+[a-zA-Z]? - ", Pattern.CASE_INSENSITIVE);
+	private static final Pattern STARTS_WITH_RSN = Pattern.compile("^[\\d]+[a-z]? - ", Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern STARTS_WITH_INBOUND_DASH = Pattern.compile("^Inbound - ", Pattern.CASE_INSENSITIVE);
 
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
-		if (Utils.isUppercaseOnly(tripHeadsign, true, true)) {
-			tripHeadsign = tripHeadsign.toLowerCase(Locale.ENGLISH);
-		}
+		tripHeadsign = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, tripHeadsign);
 		tripHeadsign = STARTS_WITH_RSN.matcher(tripHeadsign).replaceAll(StringUtils.EMPTY);
 		tripHeadsign = STARTS_WITH_INBOUND_DASH.matcher(tripHeadsign).replaceAll(StringUtils.EMPTY);
 		tripHeadsign = CleanUtils.cleanNumbers(tripHeadsign);
@@ -435,12 +443,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	private static final Pattern INDUSTRIAL = Pattern.compile("((^|\\W)(industrial)(\\W|$))", Pattern.CASE_INSENSITIVE);
 	private static final String INDUSTRIAL_REPLACEMENT = "$2" + "Ind" + "$4";
 
-	private static final Pattern BOUNDS = Pattern.compile("((^|\\W)(sb|nb|eb|wb)(\\W|$))", Pattern.CASE_INSENSITIVE);
-
 	@Override
 	public String cleanStopName(String gStopName) {
-		gStopName = gStopName.toLowerCase(Locale.ENGLISH);
-		gStopName = BOUNDS.matcher(gStopName).replaceAll(StringUtils.EMPTY);
+		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName);
+		gStopName = CleanUtils.cleanBounds(gStopName);
 		gStopName = INDUSTRIAL.matcher(gStopName).replaceAll(INDUSTRIAL_REPLACEMENT);
 		gStopName = CleanUtils.removePoints(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
@@ -450,6 +456,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public int getStopId(GStop gStop) {
-		return Integer.parseInt(gStop.getStopCode()); // use stop code as stop ID
+		String stopCode = gStop.getStopCode();
+		if (stopCode.startsWith("RD")) {
+			stopCode = stopCode.substring(2);
+		}
+		return Integer.parseInt(stopCode); // use stop code as stop ID
 	}
 }
