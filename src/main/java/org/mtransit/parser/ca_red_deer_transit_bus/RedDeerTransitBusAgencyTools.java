@@ -1,6 +1,7 @@
 package org.mtransit.parser.ca_red_deer_transit_bus;
 
-import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.ColorUtils;
 import org.mtransit.parser.DefaultAgencyTools;
@@ -8,6 +9,7 @@ import org.mtransit.parser.MTLog;
 import org.mtransit.parser.Pair;
 import org.mtransit.parser.SplitUtils;
 import org.mtransit.parser.SplitUtils.RouteTripSpec;
+import org.mtransit.parser.StringUtils;
 import org.mtransit.parser.Utils;
 import org.mtransit.parser.gtfs.data.GCalendar;
 import org.mtransit.parser.gtfs.data.GCalendarDate;
@@ -36,7 +38,7 @@ import java.util.regex.Pattern;
 // OTHER: https://webmap.reddeer.ca/transit/google_transit.zip
 public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
-	public static void main(String[] args) {
+	public static void main(@Nullable String[] args) {
 		if (args == null || args.length == 0) {
 			args = new String[3];
 			args[0] = "input/gtfs.zip";
@@ -46,46 +48,48 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		new RedDeerTransitBusAgencyTools().start(args);
 	}
 
-	private HashSet<String> serviceIds;
+	@Nullable
+	private HashSet<Integer> serviceIdInts;
 
 	@Override
-	public void start(String[] args) {
+	public void start(@NotNull String[] args) {
 		MTLog.log("Generating Red Deer Transit bus data...");
 		long start = System.currentTimeMillis();
-		this.serviceIds = extractUsefulServiceIds(args, this, true);
+		this.serviceIdInts = extractUsefulServiceIdInts(args, this, true);
 		super.start(args);
 		MTLog.log("Generating Red Deer Transit bus data... DONE in %s.", Utils.getPrettyDuration(System.currentTimeMillis() - start));
 	}
 
 	@Override
 	public boolean excludingAll() {
-		return this.serviceIds != null && this.serviceIds.isEmpty();
+		return this.serviceIdInts != null && this.serviceIdInts.isEmpty();
 	}
 
 	@Override
-	public boolean excludeCalendar(GCalendar gCalendar) {
-		if (this.serviceIds != null) {
-			return excludeUselessCalendar(gCalendar, this.serviceIds);
+	public boolean excludeCalendar(@NotNull GCalendar gCalendar) {
+		if (this.serviceIdInts != null) {
+			return excludeUselessCalendarInt(gCalendar, this.serviceIdInts);
 		}
 		return super.excludeCalendar(gCalendar);
 	}
 
 	@Override
-	public boolean excludeCalendarDate(GCalendarDate gCalendarDates) {
-		if (this.serviceIds != null) {
-			return excludeUselessCalendarDate(gCalendarDates, this.serviceIds);
+	public boolean excludeCalendarDate(@NotNull GCalendarDate gCalendarDates) {
+		if (this.serviceIdInts != null) {
+			return excludeUselessCalendarDateInt(gCalendarDates, this.serviceIdInts);
 		}
 		return super.excludeCalendarDate(gCalendarDates);
 	}
 
 	@Override
-	public boolean excludeTrip(GTrip gTrip) {
-		if (this.serviceIds != null) {
-			return excludeUselessTrip(gTrip, this.serviceIds);
+	public boolean excludeTrip(@NotNull GTrip gTrip) {
+		if (this.serviceIdInts != null) {
+			return excludeUselessTripInt(gTrip, this.serviceIdInts);
 		}
 		return super.excludeTrip(gTrip);
 	}
 
+	@NotNull
 	@Override
 	public Integer getAgencyRouteType() {
 		return MAgency.ROUTE_TYPE_BUS;
@@ -98,7 +102,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	private static final long ROUTE_ID_ENDS_WITH_A = 10_000L;
 
 	@Override
-	public long getRouteId(GRoute gRoute) {
+	public long getRouteId(@NotNull GRoute gRoute) {
 		if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
 			return Long.parseLong(gRoute.getRouteShortName()); // use route short name as route ID
 		}
@@ -115,8 +119,9 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	private static final String YELLOW_SCHOOL_BUS_COLOR = "FFD800";
 
 	@SuppressWarnings("DuplicateBranchesInSwitch")
+	@Nullable
 	@Override
-	public String getRouteColor(GRoute gRoute) {
+	public String getRouteColor(@NotNull GRoute gRoute) {
 		String routeColor = gRoute.getRouteColor();
 		if (ColorUtils.WHITE.equalsIgnoreCase(routeColor)) {
 			routeColor = null;
@@ -157,9 +162,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	private static final String _SLASH_ = " / ";
 
+	@NotNull
 	@SuppressWarnings("DuplicateBranchesInSwitch")
 	@Override
-	public String getRouteLongName(GRoute gRoute) {
+	public String getRouteLongName(@NotNull GRoute gRoute) {
 		String routeLongName = gRoute.getRouteLongName();
 		routeLongName = cleanRouteLongName(routeLongName);
 		if (StringUtils.isEmpty(routeLongName)) {
@@ -218,7 +224,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	private String cleanRouteLongName(String routeLongName) {
 		routeLongName = ROUTE_RSN.matcher(routeLongName).replaceAll(StringUtils.EMPTY);
-		routeLongName = INDUSTRIAL.matcher(routeLongName).replaceAll(INDUSTRIAL_REPLACEMENT);
+		//noinspection deprecation
 		routeLongName = CleanUtils.removePoints(routeLongName);
 		routeLongName = CleanUtils.cleanStreetTypes(routeLongName);
 		return routeLongName;
@@ -228,6 +234,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	private static final String AGENCY_COLOR = AGENCY_COLOR_RED;
 
+	@NotNull
 	@Override
 	public String getAgencyColor() {
 		return AGENCY_COLOR;
@@ -237,6 +244,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	static {
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<>();
+		//noinspection deprecation
 		map2.put(1L, new RouteTripSpec(1L, // SAME HEAD-SIGNS for both
 				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
 				1, MTrip.HEADSIGN_TYPE_STRING, "Kingston") //
@@ -251,6 +259,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1078") // WB KINGSTON DR @ GAETZ AV #KINGSTON
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(2L, new RouteTripSpec(2L, // SAME HEAD-SIGNS for both
 				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
 				1, MTrip.HEADSIGN_TYPE_STRING, "Kingston") //
@@ -272,6 +281,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1079") // EB KINGSTON DR @ GAETZ AV #KINGSTON
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(3L, new RouteTripSpec(3L, // SAME HEAD-SIGNS for both
 				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
 				1, MTrip.HEADSIGN_TYPE_STRING, "Sorensen")
@@ -286,6 +296,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1267") // Sorensen Station 49 AV @ 48 ST #SORENSEN
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(4L, new RouteTripSpec(4L, // SAME HEAD-SIGNS for both
 				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
 				1, MTrip.HEADSIGN_TYPE_STRING, "Kingston") //
@@ -310,6 +321,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1079") // EB KINGSTON DR @ GAETZ AV #KINGSTON
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(11L, new RouteTripSpec(11L, //
 				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
 				1, MTrip.HEADSIGN_TYPE_STRING, "Sorensen")
@@ -327,34 +339,37 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(13L, new RouteTripSpec(13L, //
-			0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
-			1, MTrip.HEADSIGN_TYPE_STRING, "Sorensen")
-			.addTripSort(0, //
-					Arrays.asList( //
-							Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
-							Stops.getALL_STOPS().get("900") // WB BENNETT ST @ BAKER AV #BOWER
-					)) //
-			.addTripSort(1, //
-					Arrays.asList( //
-							Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV #BOWER
-							Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
-					)) //
-			.compileBothTripSort());
+				0, MTrip.HEADSIGN_TYPE_STRING, "Bower", //
+				1, MTrip.HEADSIGN_TYPE_STRING, "Sorensen")
+				.addTripSort(0, //
+						Arrays.asList( //
+								Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+								Stops.getALL_STOPS().get("900") // WB BENNETT ST @ BAKER AV #BOWER
+						)) //
+				.addTripSort(1, //
+						Arrays.asList( //
+								Stops.getALL_STOPS().get("900"), // WB BENNETT ST @ BAKER AV #BOWER
+								Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+						)) //
+				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(29L, new RouteTripSpec(29L, // because same trip headsigns
-			0, MTrip.HEADSIGN_TYPE_STRING, "Sorensen", //
-			1, MTrip.HEADSIGN_TYPE_STRING, "Hunting Hls & Notre Dame HS")
-			.addTripSort(0, //
-					Arrays.asList( //
-							Stops.getALL_STOPS().get("1134"), // SB LOCKWOOD AV @  32 ST
-							Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
-					)) //
-			.addTripSort(1, //
-					Arrays.asList( //
-							Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
-							Stops.getALL_STOPS().get("1130") // WB LEES ST @ LOCKWOOD AV
-					)) //
-			.compileBothTripSort());
+				0, MTrip.HEADSIGN_TYPE_STRING, "Sorensen", //
+				1, MTrip.HEADSIGN_TYPE_STRING, "Hunting Hls & Notre Dame HS")
+				.addTripSort(0, //
+						Arrays.asList( //
+								Stops.getALL_STOPS().get("1134"), // SB LOCKWOOD AV @  32 ST
+								Stops.getALL_STOPS().get("1267") // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+						)) //
+				.addTripSort(1, //
+						Arrays.asList( //
+								Stops.getALL_STOPS().get("1267"), // 49 AV @ 48 ST SORENSEN STN #SORENSEN
+								Stops.getALL_STOPS().get("1130") // WB LEES ST @ LOCKWOOD AV
+						)) //
+				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(103L, new RouteTripSpec(103L, //
 				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
 				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
@@ -369,6 +384,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 								Stops.getALL_STOPS().get("1402") // 42ND ST @ 51AV
 						)) //
 				.compileBothTripSort());
+		//noinspection deprecation
 		map2.put(104L, new RouteTripSpec(104L, //
 				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.NORTH.getId(), //
 				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_DIRECTION, MDirectionType.SOUTH.getId()) //
@@ -387,23 +403,25 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
-	public int compareEarly(long routeId, List<MTripStop> list1, List<MTripStop> list2, MTripStop ts1, MTripStop ts2, GStop ts1GStop, GStop ts2GStop) {
+	public int compareEarly(long routeId, @NotNull List<MTripStop> list1, @NotNull List<MTripStop> list2, @NotNull MTripStop ts1, @NotNull MTripStop ts2, @NotNull GStop ts1GStop, @NotNull GStop ts2GStop) {
 		if (ALL_ROUTE_TRIPS2.containsKey(routeId)) {
 			return ALL_ROUTE_TRIPS2.get(routeId).compare(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop, this);
 		}
 		return super.compareEarly(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop);
 	}
 
+	@NotNull
 	@Override
-	public ArrayList<MTrip> splitTrip(MRoute mRoute, GTrip gTrip, GSpec gtfs) {
+	public ArrayList<MTrip> splitTrip(@NotNull MRoute mRoute, @Nullable GTrip gTrip, @NotNull GSpec gtfs) {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return ALL_ROUTE_TRIPS2.get(mRoute.getId()).getAllTrips();
 		}
 		return super.splitTrip(mRoute, gTrip, gtfs);
 	}
 
+	@NotNull
 	@Override
-	public Pair<Long[], Integer[]> splitTripStop(MRoute mRoute, GTrip gTrip, GTripStop gTripStop, ArrayList<MTrip> splitTrips, GSpec routeGTFS) {
+	public Pair<Long[], Integer[]> splitTripStop(@NotNull MRoute mRoute, @NotNull GTrip gTrip, @NotNull GTripStop gTripStop, @NotNull ArrayList<MTrip> splitTrips, @NotNull GSpec routeGTFS) {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return SplitUtils.splitTripStop(mRoute, gTrip, gTripStop, routeGTFS, ALL_ROUTE_TRIPS2.get(mRoute.getId()), this);
 		}
@@ -411,13 +429,13 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
-	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
+	public void setTripHeadsign(@NotNull MRoute mRoute, @NotNull MTrip mTrip, @NotNull GTrip gTrip, @NotNull GSpec gtfs) {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
 		mTrip.setHeadsignString(
-			cleanTripHeadsign(gTrip.getTripHeadsign()),
-			gTrip.getDirectionIdOrDefault()
+				cleanTripHeadsign(gTrip.getTripHeadsignOrDefault()),
+				gTrip.getDirectionIdOrDefault()
 		);
 	}
 
@@ -425,8 +443,9 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	private static final Pattern STARTS_WITH_INBOUND_DASH = Pattern.compile("^Inbound - ", Pattern.CASE_INSENSITIVE);
 
+	@NotNull
 	@Override
-	public String cleanTripHeadsign(String tripHeadsign) {
+	public String cleanTripHeadsign(@NotNull String tripHeadsign) {
 		tripHeadsign = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, tripHeadsign);
 		tripHeadsign = STARTS_WITH_RSN.matcher(tripHeadsign).replaceAll(StringUtils.EMPTY);
 		tripHeadsign = STARTS_WITH_INBOUND_DASH.matcher(tripHeadsign).replaceAll(StringUtils.EMPTY);
@@ -436,26 +455,22 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
-	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
+	public boolean mergeHeadsign(@NotNull MTrip mTrip, @NotNull MTrip mTripToMerge) {
 		throw new MTLog.Fatal("Need to merge trip head-signs: '%s' VS '%s'", mTrip, mTripToMerge);
 	}
 
-	private static final Pattern INDUSTRIAL = Pattern.compile("((^|\\W)(industrial)(\\W|$))", Pattern.CASE_INSENSITIVE);
-	private static final String INDUSTRIAL_REPLACEMENT = "$2" + "Ind" + "$4";
-
+	@NotNull
 	@Override
-	public String cleanStopName(String gStopName) {
+	public String cleanStopName(@NotNull String gStopName) {
 		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName);
 		gStopName = CleanUtils.cleanBounds(gStopName);
-		gStopName = INDUSTRIAL.matcher(gStopName).replaceAll(INDUSTRIAL_REPLACEMENT);
-		gStopName = CleanUtils.removePoints(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
 		return CleanUtils.cleanLabel(gStopName);
 	}
 
 	@Override
-	public int getStopId(GStop gStop) {
+	public int getStopId(@NotNull GStop gStop) {
 		String stopCode = gStop.getStopCode();
 		if (stopCode.startsWith("RD")) {
 			stopCode = stopCode.substring(2);
