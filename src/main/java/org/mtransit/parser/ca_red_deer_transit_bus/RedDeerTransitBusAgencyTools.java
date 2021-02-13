@@ -214,7 +214,9 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		return routeLongName;
 	}
 
-	private String cleanRouteLongName(String routeLongName) {
+	@NotNull
+	@Override
+	public String cleanRouteLongName(@NotNull String routeLongName) {
 		routeLongName = ROUTE_RSN.matcher(routeLongName).replaceAll(EMPTY);
 		//noinspection deprecation
 		routeLongName = CleanUtils.removePoints(routeLongName);
