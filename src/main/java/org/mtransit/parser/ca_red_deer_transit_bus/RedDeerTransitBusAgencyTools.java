@@ -1,84 +1,41 @@
 package org.mtransit.parser.ca_red_deer_transit_bus;
 
+import static org.mtransit.commons.StringUtils.EMPTY;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mtransit.parser.CleanUtils;
+import org.mtransit.commons.CharUtils;
+import org.mtransit.commons.CleanUtils;
+import org.mtransit.commons.StringUtils;
 import org.mtransit.parser.ColorUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
-import org.mtransit.parser.StringUtils;
-import org.mtransit.parser.Utils;
-import org.mtransit.parser.gtfs.data.GCalendar;
-import org.mtransit.parser.gtfs.data.GCalendarDate;
 import org.mtransit.parser.gtfs.data.GRoute;
-import org.mtransit.parser.gtfs.data.GSpec;
 import org.mtransit.parser.gtfs.data.GStop;
-import org.mtransit.parser.gtfs.data.GTrip;
 import org.mtransit.parser.mt.data.MAgency;
-import org.mtransit.parser.mt.data.MRoute;
-import org.mtransit.parser.mt.data.MTrip;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.mtransit.parser.StringUtils.EMPTY;
 
 // https://data.reddeer.ca/gtfsdatafeed
 // https://data.reddeer.ca/data/GTFS/RD_GTFS.zip
 // OTHER: https://webmap.reddeer.ca/transit/google_transit.zip
 public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
-	public static void main(@Nullable String[] args) {
-		if (args == null || args.length == 0) {
-			args = new String[3];
-			args[0] = "input/gtfs.zip";
-			args[1] = "../../mtransitapps/ca-red-deer-transit-bus-android/res/raw/";
-			args[2] = ""; // files-prefix
-		}
+	public static void main(@NotNull String[] args) {
 		new RedDeerTransitBusAgencyTools().start(args);
 	}
 
-	@Nullable
-	private HashSet<Integer> serviceIdInts;
-
 	@Override
-	public void start(@NotNull String[] args) {
-		MTLog.log("Generating Red Deer Transit bus data...");
-		long start = System.currentTimeMillis();
-		this.serviceIdInts = extractUsefulServiceIdInts(args, this, true);
-		super.start(args);
-		MTLog.log("Generating Red Deer Transit bus data... DONE in %s.", Utils.getPrettyDuration(System.currentTimeMillis() - start));
+	public boolean defaultExcludeEnabled() {
+		return true;
 	}
 
+	@NotNull
 	@Override
-	public boolean excludingAll() {
-		return this.serviceIdInts != null && this.serviceIdInts.isEmpty();
-	}
-
-	@Override
-	public boolean excludeCalendar(@NotNull GCalendar gCalendar) {
-		if (this.serviceIdInts != null) {
-			return excludeUselessCalendarInt(gCalendar, this.serviceIdInts);
-		}
-		return super.excludeCalendar(gCalendar);
-	}
-
-	@Override
-	public boolean excludeCalendarDate(@NotNull GCalendarDate gCalendarDates) {
-		if (this.serviceIdInts != null) {
-			return excludeUselessCalendarDateInt(gCalendarDates, this.serviceIdInts);
-		}
-		return super.excludeCalendarDate(gCalendarDates);
-	}
-
-	@Override
-	public boolean excludeTrip(@NotNull GTrip gTrip) {
-		if (this.serviceIdInts != null) {
-			return excludeUselessTripInt(gTrip, this.serviceIdInts);
-		}
-		return super.excludeTrip(gTrip);
+	public String getAgencyName() {
+		return "Red Deer";
 	}
 
 	@NotNull
@@ -95,17 +52,21 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public long getRouteId(@NotNull GRoute gRoute) {
-		if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
-			return Long.parseLong(gRoute.getRouteShortName()); // use route short name as route ID
+		String rsn = gRoute.getRouteShortName();
+		if (rsn.startsWith("R")) {
+			rsn = rsn.substring(1);
 		}
-		Matcher matcher = DIGITS.matcher(gRoute.getRouteShortName());
+		if (CharUtils.isDigitsOnly(rsn)) {
+			return Long.parseLong(rsn); // use route short name as route ID
+		}
+		final Matcher matcher = DIGITS.matcher(rsn);
 		if (matcher.find()) {
-			long id = Long.parseLong(matcher.group());
-			if (gRoute.getRouteShortName().endsWith(A)) {
+			final long id = Long.parseLong(matcher.group());
+			if (rsn.endsWith(A)) {
 				return ROUTE_ID_ENDS_WITH_A + id;
 			}
 		}
-		throw new MTLog.Fatal("Unexpected route ID for %s!", gRoute);
+		throw new MTLog.Fatal("Unexpected route ID for %s!", gRoute.toStringPlus());
 	}
 
 	private static final String YELLOW_SCHOOL_BUS_COLOR = "FFD800";
@@ -119,8 +80,12 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 			routeColor = null;
 		}
 		if (StringUtils.isEmpty(routeColor)) {
-			if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
-				int rsn = Integer.parseInt(gRoute.getRouteShortName());
+			String rsnS = gRoute.getRouteShortName();
+			if (rsnS.startsWith("R")) {
+				rsnS = rsnS.substring(1);
+			}
+			if (CharUtils.isDigitsOnly(rsnS)) {
+				int rsn = Integer.parseInt(rsnS);
 				if (rsn >= 10 && rsn < 20) {
 					return "5E5F5F"; // GRAY
 				}
@@ -139,10 +104,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 				// @formatter:on
 				}
 			}
-			if ("12A".equalsIgnoreCase(gRoute.getRouteShortName())) {
+			if ("12A".equalsIgnoreCase(rsnS)) {
 				return "AE7B10";
 			}
-			if ("35A".equalsIgnoreCase(gRoute.getRouteShortName())) {
+			if ("35A".equalsIgnoreCase(rsnS)) {
 				return YELLOW_SCHOOL_BUS_COLOR;
 			}
 			throw new MTLog.Fatal("Unexpected route color '%s'", gRoute.toStringPlus());
@@ -158,10 +123,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	@SuppressWarnings("DuplicateBranchesInSwitch")
 	@Override
 	public String getRouteLongName(@NotNull GRoute gRoute) {
-		String routeLongName = gRoute.getRouteLongName();
+		String routeLongName = gRoute.getRouteLongNameOrDefault();
 		routeLongName = cleanRouteLongName(routeLongName);
 		if (StringUtils.isEmpty(routeLongName)) {
-			if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
+			if (CharUtils.isDigitsOnly(gRoute.getRouteShortName())) {
 				int rsn = Integer.parseInt(gRoute.getRouteShortName());
 				switch (rsn) {
 				// @formatter:off
@@ -217,11 +182,10 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	@NotNull
 	@Override
 	public String cleanRouteLongName(@NotNull String routeLongName) {
+		routeLongName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, routeLongName, getIgnoredWords());
 		routeLongName = ROUTE_RSN.matcher(routeLongName).replaceAll(EMPTY);
-		//noinspection deprecation
-		routeLongName = CleanUtils.removePoints(routeLongName);
 		routeLongName = CleanUtils.cleanStreetTypes(routeLongName);
-		return routeLongName;
+		return CleanUtils.cleanLabel(routeLongName);
 	}
 
 	private static final String AGENCY_COLOR_RED = "BF311A"; // RED (from web site CSS)
@@ -232,14 +196,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String getAgencyColor() {
 		return AGENCY_COLOR;
-	}
-
-	@Override
-	public void setTripHeadsign(@NotNull MRoute mRoute, @NotNull MTrip mTrip, @NotNull GTrip gTrip, @NotNull GSpec gtfs) {
-		mTrip.setHeadsignString(
-				cleanTripHeadsign(gTrip.getTripHeadsignOrDefault()),
-				gTrip.getDirectionIdOrDefault()
-		);
 	}
 
 	@Override
@@ -270,11 +226,6 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = CleanUtils.cleanNumbers(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanStreetTypes(tripHeadsign);
 		return CleanUtils.cleanLabel(tripHeadsign);
-	}
-
-	@Override
-	public boolean mergeHeadsign(@NotNull MTrip mTrip, @NotNull MTrip mTripToMerge) {
-		throw new MTLog.Fatal("Need to merge trip head-signs: '%s' VS '%s'", mTrip, mTripToMerge);
 	}
 
 	private String[] getIgnoredWords() {
