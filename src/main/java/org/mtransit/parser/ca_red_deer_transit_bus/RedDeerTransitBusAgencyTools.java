@@ -84,31 +84,36 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 			if (rsnS.startsWith("R")) {
 				rsnS = rsnS.substring(1);
 			}
-			if (CharUtils.isDigitsOnly(rsnS)) {
-				int rsn = Integer.parseInt(rsnS);
-				if (rsn >= 10 && rsn < 20) {
-					return "5E5F5F"; // GRAY
-				}
-				if (rsn >= 20 && rsn <= 42) {
-					return YELLOW_SCHOOL_BUS_COLOR;
-				}
-				switch (rsn) {
-				// @formatter:off
-				case 1: return "E02450"; // PINK
-				case 2: return "1BAFA0"; // BLUE
-				case 3: return "DCA340"; // YELLOW MUSTARD
-				case 4: return "8A5494"; // PURPLE
-				case 53: return null; // TODO?
-				case 103: return null; // TODO?
-				case 104: return null; // TODO?
-				// @formatter:on
-				}
-			}
-			if ("12A".equalsIgnoreCase(rsnS)) {
-				return "AE7B10";
-			}
-			if ("35A".equalsIgnoreCase(rsnS)) {
-				return YELLOW_SCHOOL_BUS_COLOR;
+			// if (CharUtils.isDigitsOnly(rsnS)) {
+			// 	int rsn = Integer.parseInt(rsnS);
+			// 	if (rsn >= 10 && rsn < 20) {
+			// 		return "5E5F5F"; // GRAY
+			// 	}
+			// 	if (rsn >= 20 && rsn <= 42) {
+			// 		return YELLOW_SCHOOL_BUS_COLOR;
+			// 	}
+			// 	switch (rsn) {
+			// 	// @formatter:off
+			// 	case 1: return "E02450"; // PINK
+			// 	case 2: return "1BAFA0"; // BLUE
+			// 	case 3: return "DCA340"; // YELLOW MUSTARD
+			// 	case 4: return "8A5494"; // PURPLE
+			// 	case 53: return null; // TODO?
+			// 	case 103: return null; // TODO?
+			// 	case 104: return null; // TODO?
+			// 	case 111: return null; // TODO?
+			// 	case 112: return null; // TODO?
+			// 	// @formatter:on
+			// 	}
+			// }
+			// if ("12A".equalsIgnoreCase(rsnS)) {
+			// 	return "AE7B10";
+			// }
+			// if ("35A".equalsIgnoreCase(rsnS)) {
+			// 	return YELLOW_SCHOOL_BUS_COLOR;
+			// }
+			if (true) {
+				return null; // TODO?
 			}
 			throw new MTLog.Fatal("Unexpected route color '%s'", gRoute.toStringPlus());
 		}
@@ -223,6 +228,7 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, tripHeadsign, getIgnoredWords());
 		tripHeadsign = STARTS_WITH_RSN.matcher(tripHeadsign).replaceAll(EMPTY);
 		tripHeadsign = STARTS_WITH_INBOUND_DASH.matcher(tripHeadsign).replaceAll(EMPTY);
+		tripHeadsign = CleanUtils.keepToAndRemoveVia(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanNumbers(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanStreetTypes(tripHeadsign);
 		return CleanUtils.cleanLabel(tripHeadsign);
@@ -232,13 +238,23 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		return new String[]{
 				"EB", "WB", "NB", "SW",
 				"AM", "PM",
+				"LTCHS", "SJHS", "HHHS", "NDHS",
+				"ND",
+		};
+	}
+
+	private String[] getIgnoredWordsStop() {
+		return new String[]{
+				"EB", "WB", "NB", "SW",
+				"AM", "PM",
+				"LTCHS", "SJHS", "HHHS", "NDHS",
 		};
 	}
 
 	@NotNull
 	@Override
 	public String cleanStopName(@NotNull String gStopName) {
-		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName, getIgnoredWords());
+		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName, getIgnoredWordsStop());
 		gStopName = CleanUtils.cleanBounds(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
@@ -250,6 +266,9 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 		String stopCode = gStop.getStopCode();
 		if (stopCode.startsWith("RD")) {
 			stopCode = stopCode.substring(2);
+		}
+		if (stopCode.endsWith("_")) {
+			stopCode = stopCode.substring(0, stopCode.length() - 1);
 		}
 		return Integer.parseInt(stopCode); // use stop code as stop ID
 	}
