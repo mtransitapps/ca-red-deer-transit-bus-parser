@@ -9,6 +9,7 @@ import org.mtransit.parser.ColorUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.mt.data.MAgency;
+import org.mtransit.parser.mt.data.MRouteSNToIDConverter;
 
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +55,15 @@ public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public boolean useRouteShortNameForRouteId() {
 		return true;
+	}
+
+	@Nullable
+	@Override
+	public Long convertRouteIdPreviousChars(@NotNull String previousChars) {
+		switch (previousChars) {
+			case "SNTA": return MRouteSNToIDConverter.startsWith(MRouteSNToIDConverter.other(25L));
+		}
+		return null;
 	}
 
 	private static final Pattern STARTS_WITH_R_ = Pattern.compile("(^(r))", Pattern.CASE_INSENSITIVE);
