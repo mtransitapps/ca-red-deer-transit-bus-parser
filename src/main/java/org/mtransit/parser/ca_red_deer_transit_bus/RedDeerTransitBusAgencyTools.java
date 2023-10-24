@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 // https://data.reddeer.ca/gtfsdatafeed
-// https://data.reddeer.ca/data/GTFS/RD_GTFS.zip
+// OLD :https://data.reddeer.ca/data/GTFS/RD_GTFS.zip
 // OTHER: https://webmap.reddeer.ca/transit/google_transit.zip
 public class RedDeerTransitBusAgencyTools extends DefaultAgencyTools {
 
